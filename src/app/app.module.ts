@@ -35,7 +35,7 @@ import { PostEditorComponent } from './mainpage/post-editor/post-editor.componen
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
-import { EditorModule } from 'primeng/editor';
+//import { EditorModule } from 'primeng/editor';
 import { NavigationMenuComponent } from './mainpage/navigation-menu/navigation-menu.component';
 import { ChipsModule } from 'primeng/chips';
 import { ReportPostComponent } from './mainpage/report-post/report-post.component';
@@ -46,7 +46,7 @@ import {DataViewModule} from 'primeng/dataview';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import {SidebarModule} from 'primeng/sidebar';
 import {PanelMenuModule} from 'primeng/panelmenu';
-
+import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 
 @NgModule({
   declarations: [
@@ -101,6 +101,7 @@ import {PanelMenuModule} from 'primeng/panelmenu';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: WafrnAuthInterceptor, multi: true },
+    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
     MessageService
   ],
   bootstrap: [AppComponent],

@@ -2,7 +2,9 @@
   [(visible)]="editorVisible" [modal]="true" 
   [style]="{width: '75vw'}">
   <h2 *ngIf="idPostToReblog" >You are reblogging the post. Your followers will see the full thread with your reply on it</h2>
-  <p-overlayPanel #uploadImagesPanel>
+  <p-overlayPanel
+  [showTransitionOptions]="'100ms'" [hideTransitionOptions]="'100ms'"
+  #uploadImagesPanel>
     <div>
       <label for="imgSelected" class="block text-900 font-medium mb-2">Upload your image</label>
       <input *ngIf="displayUploadImagePanel" id="imgSelected" type="file" accept="image/jpeg,image/png,image/webp,image/gif"
@@ -20,30 +22,24 @@
     <p-button label="Upload image" [disabled]="disableImageUploadButton" (onClick)="uploadImage()"></p-button>
 
   </p-overlayPanel>
-  <p-editor [(ngModel)]="postCreatorContent" [style]="{'height':'25vh'}">
-    <ng-template pTemplate="header">
-      <span class="ql-formats">
-        <select class="ql-size">
-          <option value="small"></option>
-          <!-- Note a missing, thus falsy value, is used to reset to default -->
-          <option selected></option>
-          <option value="large"></option>
-          <option value="huge"></option>
-        </select>
-        <button type="button" class="ql-bold" aria-label="Bold"></button>
-        <button type="button" class="ql-italic" aria-label="Italic"></button>
-        <button type="button" class="ql-underline" aria-label="Underline"></button>
-        <button type="button" class="ql-link" aria-label="Insert Link"></button>
-        <button type="button" class="ql-code-block" aria-label="Insert Code Block"></button>
-        <button #uploadImages (click)="uploadImagesPanel.show($event, uploadImages); displayUploadImagePanel = true"
-          type="button"><i class="pi pi-upload"></i></button>
 
+  <editor id="tinyMCE"
+  [init]="{
+     plugins: 'link code',
+     skin: 'oxide-dark',
+     content_css: 'dark',
+     toolbar: 'uploadMedia',
+     setup: setupEditor
+    }"
 
-      </span>
-    </ng-template>
-  </p-editor>
-
-  <h5>Tags (comma separated)</h5>
+    [(ngModel)]="postCreatorContent"
+></editor>
+<button pButton
+icon="pi pi-upload" 
+(click)="uploadImagesPanel.show($event); displayUploadImagePanel = true"
+label="Add picture to post"
+type="button"></button>
+  <h5>Tags (comma separated, enter on android phones)</h5>
   <p-chips [(ngModel)]="tags" separator=","></p-chips>
 
   <p-captcha *ngIf="!postBeingSubmitted && editorVisible" (onResponse)="captchaResolved($event)" (onExpire)="captchaExpired()" [siteKey]="captchaKey" theme="dark"

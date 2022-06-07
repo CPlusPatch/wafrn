@@ -3,6 +3,7 @@ import { MessageService } from 'primeng/api';
 import { EditorService } from 'src/app/services/editor.service';
 import { PostsService } from 'src/app/services/posts.service';
 import { environment } from 'src/environments/environment';
+import { Editor } from 'tinymce';
 
 @Component({
   selector: 'app-post-editor',
@@ -12,7 +13,7 @@ import { environment } from 'src/environments/environment';
 export class PostEditorComponent implements OnInit {
 
   idPostToReblog: string | undefined;
-  editorVisible: boolean = false;
+  editorVisible: boolean = true;
   postCreatorContent: string = '';
   tags: string[] = [];
   captchaResponse: string | undefined;
@@ -24,7 +25,7 @@ export class PostEditorComponent implements OnInit {
   newImageNSFW = false;
   newImageFile: File | undefined;
   disableImageUploadButton = false;
-  @ViewChild('uploadImagesPanel') uploadImagesPanel: any;
+  @ViewChild('uploadImagesPanel', {static: true}) uploadImagesPanel: any;
 
 
   constructor(
@@ -44,6 +45,7 @@ export class PostEditorComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.uploadImagesPanel)
   }
 
 
@@ -131,6 +133,22 @@ export class PostEditorComponent implements OnInit {
     this.disableImageUploadButton = false;
 
 
+  }
+
+  uploadImageButtonPressed($evt: any) {
+    console.log(this.uploadImagesPanel)
+    this.uploadImagesPanel.show($evt)
+    this.displayUploadImagePanel = true
+  }
+
+  setupEditor(editor: Editor) {
+    editor.ui.registry.addButton('uploadMedia', {
+      text: 'Add image to post',
+      icon: 'image',
+      tooltip: 'Add image',
+      
+      onAction: this.uploadImageButtonPressed
+    });
   }
 
 
